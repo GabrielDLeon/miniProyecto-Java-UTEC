@@ -1,9 +1,10 @@
-package miniProyecto;
+package edu.utec.uy.entity;
 
 import java.util.LinkedList;
 
 
 public class Funcionalidad {
+	private int id;
     private String nombre, descripcion;
     private LinkedList<Rol> rolLista = new LinkedList<Rol>();
     private TipoFuncionalidad tipoFuncionalidad;
@@ -22,6 +23,14 @@ public class Funcionalidad {
 		super();
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getNombre() {

@@ -1,4 +1,4 @@
-package controllers;
+package edu.utec.uy.older;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,8 @@ import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 
 import javax.swing.JOptionPane;
-import views.viewController;
+
+import edu.utec.uy.view.viewController;
 
 public class PersonaController {
 	public static void mostrarPersona(Connection connection) {

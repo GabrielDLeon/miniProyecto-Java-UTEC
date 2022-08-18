@@ -1,4 +1,4 @@
-package miniProyecto;
+package edu.utec.uy.entity;
 
 public class RolOperador extends Rol{
 
@@ -7,8 +7,8 @@ public class RolOperador extends Rol{
 		// TODO Auto-generated constructor stub
 	}
 
-	public RolOperador(String nombre, String descripcion) {
-		super(nombre, descripcion);
+	public RolOperador(int id, String nombre, String descripcion) {
+		super(id, nombre, descripcion);
 		// TODO Auto-generated constructor stub
 	}
 

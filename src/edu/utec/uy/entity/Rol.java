@@ -1,12 +1,21 @@
-package miniProyecto;
+package edu.utec.uy.entity;
 
 public abstract class Rol {
-    private String nombre, descripcion;
+    private int id;
+	private String nombre, descripcion;
 
     public Rol() {
 		super();
 	}
     
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public String getNombre() {
 		return nombre;
 	}
@@ -23,8 +32,9 @@ public abstract class Rol {
 		this.descripcion = descripcion;
 	}
 
-	public Rol(String nombre, String descripcion) {
+	public Rol(int id, String nombre, String descripcion) {
 		super();
+		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 	}

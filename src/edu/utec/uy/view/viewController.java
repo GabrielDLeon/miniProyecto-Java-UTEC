@@ -1,4 +1,4 @@
-package views;
+package edu.utec.uy.view;
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;

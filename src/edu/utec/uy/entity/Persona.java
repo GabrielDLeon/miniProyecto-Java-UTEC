@@ -1,4 +1,4 @@
-package miniProyecto;
+package edu.utec.uy.entity;
 
 import java.util.Date;
 
