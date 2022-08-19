@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Persona {
 	
+	private int id;
 	private String documento, apellido1, apellido2, nombre1, nombre2, mail, clave;
 	private Date fechaNac;
 	private Rol rol;
@@ -24,6 +25,14 @@ public class Persona {
 		this.clave = clave;
 		this.fechaNac = fechaNac;
 		this.rol = rol;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public Rol getRol() {
