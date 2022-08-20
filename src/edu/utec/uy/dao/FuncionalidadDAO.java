@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import edu.utec.uy.entity.Funcionalidad;
 import edu.utec.uy.view.viewController;
@@ -23,6 +24,7 @@ public class FuncionalidadDAO {
 			statement.close();
 			mensaje = "FUNCIONALIDAD INSERTADA CORRECTAMENTE";
 		} catch (SQLException e) {
+			e.printStackTrace();
 			mensaje = "NO SE PUDO INSERTAR LA FUNCIONALIDAD\n"+e.getMessage();
 		}
 		return mensaje;
@@ -58,14 +60,24 @@ public class FuncionalidadDAO {
 		return mensaje;
 	}
 	
-	public void listarFuncionalidad(Connection connection) {
-		String query = "SELECT * FROM FUNCIONALIDAD";
+
+	public ArrayList<Funcionalidad> listarFuncionalidad(Connection connection) {
+		ArrayList<Funcionalidad> rsAL = new ArrayList<Funcionalidad>();
+		String query = "SELECT * FROM FUNCIONALIDAD ORDER BY id_funcionalidad";
 		try {
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(query);
-			viewController.showData(rs);
+			//viewController.showData(rs);
+			while(rs.next()){
+				Funcionalidad f = new Funcionalidad();
+				f.setId(rs.getInt("ID_FUNCIONALIDAD"));
+				f.setNombre(rs.getString("NOMBRE"));
+				f.setDescripcion(rs.getString("DESCRIPCION"));
+				rsAL.add(f);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return rsAL;
 	}
 }

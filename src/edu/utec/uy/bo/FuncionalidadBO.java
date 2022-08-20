@@ -1,6 +1,8 @@
 package edu.utec.uy.bo;
 
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 import edu.utec.uy.dao.FuncionalidadDAO;
 import edu.utec.uy.db.DB;
@@ -15,7 +17,6 @@ public class FuncionalidadBO {
 		try {
 			Connection connection = DB.getConnection();
 			mensaje = DAO.agregarFuncionalidad(connection, instancia);
-			connection.close();
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
@@ -26,7 +27,6 @@ public class FuncionalidadBO {
 		try {
 			Connection connection = DB.getConnection();
 			mensaje = DAO.modificarFuncionalidad(connection, instancia);
-			connection.close();
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
@@ -37,21 +37,21 @@ public class FuncionalidadBO {
 		try {
 			Connection connection = DB.getConnection();
 			mensaje = DAO.eliminarFuncionalidad(connection, id);
-			connection.close();
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
 		return mensaje;
 	}
 	
-	public void listarFuncionalidad() {
+	public ArrayList<Funcionalidad> listarFuncionalidad() {
+		ArrayList<Funcionalidad> lista = new ArrayList<Funcionalidad>();		
 		try {
 			Connection connection = DB.getConnection();
-			DAO.listarFuncionalidad(connection);
-			connection.close();
+			lista = DAO.listarFuncionalidad(connection);
 		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
+			e.printStackTrace();
 		}
+		return lista;
 	}
 	
 }
