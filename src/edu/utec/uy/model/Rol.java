@@ -3,9 +3,10 @@ package edu.utec.uy.model;
 import java.util.LinkedList;
 
 public abstract class Rol {
-    private int id;
-	private String nombre, descripcion;
-	private LinkedList<Funcionalidad> listaFuncionalidad = new LinkedList<Funcionalidad>();
+    protected int id;
+    protected String nombre, descripcion;
+    protected TipoRol tipo;
+    protected LinkedList<Funcionalidad> listaFuncionalidad = new LinkedList<Funcionalidad>();
 
     public Rol() {
 		super();
@@ -35,11 +36,12 @@ public abstract class Rol {
 		this.descripcion = descripcion;
 	}
 
-	public Rol(int id, String nombre, String descripcion) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.descripcion = descripcion;
+	public TipoRol getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(TipoRol tipo) {
+		this.tipo = tipo;
 	}
 
 	@Override

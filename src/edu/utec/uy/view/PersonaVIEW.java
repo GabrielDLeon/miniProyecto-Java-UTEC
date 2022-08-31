@@ -41,8 +41,8 @@ public class PersonaVIEW extends JFrame {
 	private JTextField inputBusquedaApellido;
 	
 	private PersonaDAO pDAO = new PersonaDAO();
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField inputEmail;
+	private JTextField inputClave;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -188,19 +188,19 @@ public class PersonaVIEW extends JFrame {
 		};
 		tPersona.setModel(model);
 		
-		textField = new JTextField();
-		textField.setColumns(10);
-		textField.setBounds(142, 68, 188, 20);
-		contentPane.add(textField);
+		inputEmail = new JTextField();
+		inputEmail.setColumns(10);
+		inputEmail.setBounds(142, 68, 188, 20);
+		contentPane.add(inputEmail);
 		
 		JLabel lblMail = new JLabel("Email");
 		lblMail.setBounds(41, 71, 91, 14);
 		contentPane.add(lblMail);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(142, 96, 188, 20);
-		contentPane.add(textField_1);
+		inputClave = new JTextField();
+		inputClave.setColumns(10);
+		inputClave.setBounds(142, 96, 188, 20);
+		contentPane.add(inputClave);
 		
 		JLabel lblClave = new JLabel("Clave");
 		lblClave.setBounds(41, 99, 91, 14);
@@ -211,6 +211,7 @@ public class PersonaVIEW extends JFrame {
 		model.addColumn("Nombre");
 		model.addColumn("Apellido");
 		model.addColumn("Apellido");
+		model.addColumn("Email");
 		model.addColumn("Nacimiento");
 		
 		tPersona.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
@@ -249,14 +250,15 @@ public class PersonaVIEW extends JFrame {
 		LinkedList<Persona> lista = pDAO.getList();
         model.setRowCount(0);
         for (Persona persona : lista) {
-            Object[] fila = new Object[7];
+            Object[] fila = new Object[8];
             fila[0] = persona.getId();
             fila[1] = persona.getDocumento();
             fila[2] = persona.getNombre1();
             fila[3] = persona.getNombre2();
             fila[4] = persona.getApellido1();
             fila[5] = persona.getApellido2();
-            fila[6] = persona.getFechaNac();
+            fila[6] = persona.getMail();
+            fila[7] = persona.getFechaNac();
             model.addRow(fila);
         }
 	}
@@ -266,7 +268,12 @@ public class PersonaVIEW extends JFrame {
 	}
 	
 	public void llenarCampos(int row) {
-
+		inputDocumento.setText(tPersona.getValueAt(row, 1)+"");
+		inputNombre1.setText(tPersona.getValueAt(row, 2)+"");
+		inputNombre2.setText(tPersona.getValueAt(row, 3)+"");
+		inputApellido1.setText(tPersona.getValueAt(row, 4)+"");
+		inputApellido2.setText(tPersona.getValueAt(row, 5)+"");
+		inputEmail.setText(tPersona.getValueAt(row, 6)+"");
 	}
 	
 	public Persona extraerCampos() {

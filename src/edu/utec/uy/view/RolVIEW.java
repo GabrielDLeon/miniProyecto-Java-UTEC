@@ -12,14 +12,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
-import edu.utec.uy.bo.FuncionalidadBO;
 import edu.utec.uy.bo.RolBO;
-import edu.utec.uy.model.Funcionalidad;
 import edu.utec.uy.model.Rol;
 import edu.utec.uy.model.RolAdministrador;
 import edu.utec.uy.model.RolJefe;
 import edu.utec.uy.model.RolOperador;
-
 
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -33,22 +30,23 @@ import java.util.LinkedList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class FuncionalidadVIEW extends JFrame {
+public class RolVIEW extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField inputNombre;
 	private JTextField inputDescripcion;
 	private DefaultTableModel model;
-	private JTable tFuncionalidad;
+	private JTable tRol;
 	private JTextField inputBuscador;
 	
-	private FuncionalidadBO fBO = new FuncionalidadBO();
+	private RolBO rBO = new RolBO();
+	private JTextField inputTipo;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					FuncionalidadVIEW frame = new FuncionalidadVIEW();
+					RolVIEW frame = new RolVIEW();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -57,7 +55,7 @@ public class FuncionalidadVIEW extends JFrame {
 		});
 	}
 
-	public FuncionalidadVIEW() {
+	public RolVIEW() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 774, 378);
 		contentPane = new JPanel();
@@ -65,7 +63,7 @@ public class FuncionalidadVIEW extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblTitulo = new JLabel("Gestor de Funcionalidad");
+		JLabel lblTitulo = new JLabel("Gestor de Rol");
 		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTitulo.setBounds(40, 20, 289, 29);
 		contentPane.add(lblTitulo);
@@ -138,42 +136,64 @@ public class FuncionalidadVIEW extends JFrame {
 		scrollPane.setBounds(355, 20, 380, 257);
 		contentPane.add(scrollPane);
 		
-		tFuncionalidad = new JTable();
-		tFuncionalidad.addKeyListener(new KeyAdapter() {
+		tRol = new JTable();
+		tRol.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				int key = e.getKeyChar();
 				if (key == 27) {
-					tFuncionalidad.clearSelection();
+					tRol.clearSelection();
 				}
 			}
 		});
-		tFuncionalidad.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		scrollPane.setViewportView(tFuncionalidad);
+		tRol.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane.setViewportView(tRol);
 		model = new DefaultTableModel() {
 			@Override
 		    public boolean isCellEditable(int row, int column) {
 		       return false;
 		    }
 		};
-		tFuncionalidad.setModel(model);
+		tRol.setModel(model);
+		
+		JLabel lblTipo = new JLabel("Tipo de Rol");
+		lblTipo.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblTipo.setBounds(40, 195, 91, 14);
+		contentPane.add(lblTipo);
+		
+		inputTipo = new JTextField();
+		inputTipo.setColumns(10);
+		inputTipo.setBounds(41, 215, 290, 20);
+		contentPane.add(inputTipo);
+		
+		JButton btnFuncionalidades = new JButton("Gestionar Funcionalidades");
+		btnFuncionalidades.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		btnFuncionalidades.setEnabled(false);
+		btnFuncionalidades.setBounds(40, 287, 289, 23);
+		contentPane.add(btnFuncionalidades);
 		model.addColumn("ID");
 		model.addColumn("Tipo");
 		model.addColumn("Nombre");
 		model.addColumn("Descripcion");
 		
-		tFuncionalidad.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+		tRol.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 		    public void valueChanged(ListSelectionEvent lse) {
 		        if (!lse.getValueIsAdjusting()) {
-		        	int row = tFuncionalidad.getSelectedRow();
+		        	int row = tRol.getSelectedRow();
 		        	if (row >=0) {
 		        		llenarCampos(row);
 		        		btnEliminar.setEnabled(true);
 		        		btnModificar.setEnabled(true);
+		        		btnFuncionalidades.setEnabled(true);
 		        	} else {
 		        		limpiarInput();
 		        		btnEliminar.setEnabled(false);
 		        		btnModificar.setEnabled(false);
+		        		btnFuncionalidades.setEnabled(false);
 		        	}
 		        }
 		    }
@@ -181,46 +201,60 @@ public class FuncionalidadVIEW extends JFrame {
 		
 		actualizarTabla();
 	}
-	public Funcionalidad obtenerDatos() {
+	
+	public Rol obtenerDatos() {
 		String nombre = inputNombre.getText();
 		String description = inputDescripcion.getText();
+		String tipoRol = inputTipo.getText().toLowerCase();
 		
-		Funcionalidad f =  new Funcionalidad();
+		Rol rol;
+		if (tipoRol.equals("a")) {
+			rol = new RolAdministrador();
+		} else if (tipoRol.equals("j")) {
+			rol = new RolJefe();
+		} else if (tipoRol.equals("o")) {
+			rol = new RolOperador();
+		} else {
+			rol = new RolAdministrador();
+		}
 		
-		f.setNombre(nombre);
-		f.setDescripcion(description);
-		return f;
+		rol.setNombre(nombre);
+		rol.setDescripcion(description);
+		return rol;
 	}
 	
 	public void insertar() {
-		Funcionalidad f = obtenerDatos();
-		String msg = fBO.agregarFuncionalidad(f);
+		Rol rol = obtenerDatos();
+		String msg = rBO.agregarRol(rol);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 		limpiarInput();
 	}
 
-	public void modificar() {}
-		
-
+	public void modificar() {
+		Rol rol = obtenerDatos();
+		String msg = rBO.modificarRol(rol);
+		actualizarTabla();
+		JOptionPane.showMessageDialog(null, msg);
+;	}
 	
 	public void eliminar() {
 		int id = extraerIDSeleccion();
-		String msg = fBO.eliminarFuncionalidad(id);
+		String msg = rBO.eliminarRol(id);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 		limpiarInput();
 	}
 	
 	public void actualizarTabla() {
-		LinkedList<Funcionalidad> lista = fBO.listarFuncionalidad();
+		LinkedList<Rol> lista = rBO.listarRol();
 		model.setRowCount(0);
-        for (Funcionalidad f : lista) {
+        for (Rol rol : lista) {
             Object[] fila = new Object[4];
-            fila[0] = f.getId();
-            fila[1] = f.getTipo();
-            fila[2] = f.getNombre();
-    		fila[3] = f.getDescripcion();
+            fila[0] = rol.getId();
+            fila[1] = rol.getTipo();
+            fila[2] = rol.getNombre();
+    		fila[3] = rol.getDescripcion();
             model.addRow(fila);
         }
 	}
@@ -228,16 +262,18 @@ public class FuncionalidadVIEW extends JFrame {
 	public void limpiarInput() {
 		inputNombre.setText("");
 		inputDescripcion.setText("");
+		inputTipo.setText("");
 	}
 	
 	public void llenarCampos(int row) {
-		inputNombre.setText(tFuncionalidad.getValueAt(row, 1)+"");
-		inputDescripcion.setText(tFuncionalidad.getValueAt(row, 2)+"");
+		inputTipo.setText(tRol.getValueAt(row, 1)+"");
+		inputNombre.setText(tRol.getValueAt(row, 2)+"");
+		inputDescripcion.setText(tRol.getValueAt(row, 3)+"");
 	}
 	
 	public int extraerIDSeleccion() {
-		int row = tFuncionalidad.getSelectedRow();
-		int id = (int) tFuncionalidad.getValueAt(row, 0);
+		int row = tRol.getSelectedRow();
+		int id = (int) tRol.getValueAt(row, 0);
 		return id;
 	}
 }

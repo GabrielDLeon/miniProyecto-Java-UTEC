@@ -4,6 +4,7 @@ import java.util.LinkedList;
 
 import edu.utec.uy.dao.RolDAO;
 import edu.utec.uy.model.Rol;
+import edu.utec.uy.model.TipoRol;
 
 public class RolBO {
 	
@@ -13,6 +14,7 @@ public class RolBO {
 	public String agregarRol(Rol instancia) {
 		String nombre = instancia.getNombre();
 		String descripcion = instancia.getDescripcion();
+		TipoRol tipo = instancia.getTipo();
 		
 		if (nombre.isEmpty() || descripcion.isEmpty())
 			return "Debes completar todos los campos";

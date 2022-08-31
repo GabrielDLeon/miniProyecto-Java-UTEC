@@ -4,12 +4,8 @@ public class RolOperador extends Rol{
 
 	public RolOperador() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.tipo = TipoRol.OPERADOR_SECCION;
+	}
 	}
 
-	public RolOperador(int id, String nombre, String descripcion) {
-		super(id, nombre, descripcion);
-		// TODO Auto-generated constructor stub
-	}
-
-}
+	
