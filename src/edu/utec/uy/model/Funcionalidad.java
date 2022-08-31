@@ -1,4 +1,4 @@
-package edu.utec.uy.entity;
+package edu.utec.uy.model;
 
 import java.util.LinkedList;
 

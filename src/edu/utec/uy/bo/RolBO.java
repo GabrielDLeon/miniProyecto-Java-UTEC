@@ -1,21 +1,24 @@
 package edu.utec.uy.bo;
 
-import java.sql.Connection;
+import java.util.LinkedList;
 
 import edu.utec.uy.dao.RolDAO;
-import edu.utec.uy.db.DB;
-import edu.utec.uy.entity.Rol;
+import edu.utec.uy.model.Rol;
 
 public class RolBO {
 	
 	private String mensaje;
-	private RolDAO DAO = new RolDAO();
+	private RolDAO dao = new RolDAO();
 	
 	public String agregarRol(Rol instancia) {
+		String nombre = instancia.getNombre();
+		String descripcion = instancia.getDescripcion();
+		
+		if (nombre.isEmpty() || descripcion.isEmpty())
+			return "Debes completar todos los campos";
+		
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.agregarRol(connection, instancia);
-			connection.close();
+			mensaje = dao.insert(instancia);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
@@ -23,10 +26,14 @@ public class RolBO {
 	}
 	
 	public String modificarRol(Rol instancia) {
+		String nombre = instancia.getNombre();
+		String descripcion = instancia.getDescripcion();
+		
+		if (nombre.isEmpty() || descripcion.isEmpty())
+			return "Debes completar todos los campos";
+		
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.modificarRol(connection, instancia);
-			connection.close();
+			mensaje = dao.update(instancia);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
@@ -35,23 +42,16 @@ public class RolBO {
 	
 	public String eliminarRol(int id) {
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.eliminarRol(connection, id);
-			connection.close();
+			mensaje = dao.delete(id);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
 		return mensaje;
 	}
 	
-	public void listarFuncionalidad() {
-		try {
-			Connection connection = DB.getConnection();
-			DAO.listarRol(connection);
-			connection.close();
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
-		}
+	public LinkedList<Rol> listarRol() {
+		LinkedList<Rol> lista = dao.getList();
+		return lista;
 	}
 	
 }

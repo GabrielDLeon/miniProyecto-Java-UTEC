@@ -1,4 +1,4 @@
-package edu.utec.uy.entity;
+package edu.utec.uy.model;
 
 public enum TipoFuncionalidad {
 	CONTROL_INVENTARIO ("Control de Inventario", "Descripción de la funcionalidad "),

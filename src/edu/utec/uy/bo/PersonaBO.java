@@ -1,21 +1,18 @@
 package edu.utec.uy.bo;
 
-import java.sql.Connection;
+import java.util.LinkedList;
 
 import edu.utec.uy.dao.PersonaDAO;
-import edu.utec.uy.db.DB;
-import edu.utec.uy.entity.Persona;
+import edu.utec.uy.model.Persona;
 
 public class PersonaBO {
 
-	private String mensaje;
-	private PersonaDAO DAO = new PersonaDAO();
+	private String mensaje = "";
+	private PersonaDAO dao = new PersonaDAO();
 
 	public String login(String mail, String password) {
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.login(connection, mail, password);
-			connection.close();
+			mensaje = dao.login(mail, password);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
@@ -24,9 +21,7 @@ public class PersonaBO {
 	
 	public String agregarPersona(Persona instancia) {
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.agregarPersona(connection, instancia);
-			connection.close();
+			mensaje = dao.insert(instancia);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
@@ -35,9 +30,7 @@ public class PersonaBO {
 
 	public String modificarPersona(Persona instancia) {
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.modificarPersona(connection, instancia);
-			connection.close();
+			mensaje = dao.update(instancia);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
@@ -46,22 +39,15 @@ public class PersonaBO {
 
 	public String eliminarPersona(int id) {
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.eliminarPersona(connection, id);
-			connection.close();
+			mensaje = dao.delete(id);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
 		return mensaje;
 	}
 
-	public void listarPersona() {
-		try {
-			Connection connection = DB.getConnection();
-			DAO.listarPersona(connection);
-			connection.close();
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
-		}
+	public LinkedList<Persona> listarPersona() {
+		LinkedList<Persona> lista = dao.getList();
+		return lista;
 	}
 }

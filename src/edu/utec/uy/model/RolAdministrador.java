@@ -1,4 +1,4 @@
-package edu.utec.uy.entity;
+package edu.utec.uy.model;
 
 public class RolAdministrador extends Rol{
 

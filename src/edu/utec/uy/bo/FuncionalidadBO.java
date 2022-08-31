@@ -1,57 +1,57 @@
 package edu.utec.uy.bo;
 
-import java.sql.Connection;
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import edu.utec.uy.dao.FuncionalidadDAO;
-import edu.utec.uy.db.DB;
-import edu.utec.uy.entity.Funcionalidad;
+import edu.utec.uy.model.Funcionalidad;
 
 public class FuncionalidadBO {
 
 	private String mensaje = "";
-	private FuncionalidadDAO DAO = new FuncionalidadDAO();
-	
+	private FuncionalidadDAO dao = new FuncionalidadDAO();
+
 	public String agregarFuncionalidad(Funcionalidad instancia) {
+		String nombre = instancia.getNombre();
+		String descripcion = instancia.getDescripcion();
+
+		if (nombre.isEmpty() || descripcion.isEmpty())
+			return "Debes completar todos los campos";
+
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.agregarFuncionalidad(connection, instancia);
+			mensaje = dao.insert(instancia);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
 		return mensaje;
 	}
-	
+
 	public String modificarFuncionalidad(Funcionalidad instancia) {
+		String nombre = instancia.getNombre();
+		String descripcion = instancia.getDescripcion();
+		
+		if (nombre.isEmpty() || descripcion.isEmpty())
+			return "Debes completar todos los campos";
+		
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.modificarFuncionalidad(connection, instancia);
+			mensaje = dao.update(instancia);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
 		return mensaje;
 	}
-	
-	public String eliminarFuncionalidad(int id) {
+
+	public String eliminarFuncionalidad(int id) {		
 		try {
-			Connection connection = DB.getConnection();
-			mensaje = DAO.eliminarFuncionalidad(connection, id);
+			mensaje = dao.delete(id);
 		} catch (Exception e) {
 			mensaje += "" + e.getMessage();
 		}
 		return mensaje;
 	}
-	
-	public ArrayList<Funcionalidad> listarFuncionalidad() {
-		ArrayList<Funcionalidad> lista = new ArrayList<Funcionalidad>();		
-		try {
-			Connection connection = DB.getConnection();
-			lista = DAO.listarFuncionalidad(connection);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+
+	public LinkedList<Funcionalidad> listarFuncionalidad() {
+		LinkedList<Funcionalidad> lista = dao.getList();
 		return lista;
 	}
-	
+
 }

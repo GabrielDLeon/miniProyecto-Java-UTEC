@@ -1,8 +1,11 @@
-package edu.utec.uy.entity;
+package edu.utec.uy.model;
+
+import java.util.LinkedList;
 
 public abstract class Rol {
     private int id;
 	private String nombre, descripcion;
+	private LinkedList<Funcionalidad> listaFuncionalidad = new LinkedList<Funcionalidad>();
 
     public Rol() {
 		super();

@@ -5,18 +5,25 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.LinkedList;
 
-import edu.utec.uy.entity.Rol;
-import edu.utec.uy.view.viewController;
+import edu.utec.uy.model.Rol;
+import edu.utec.uy.utils.DB;
 
 public class RolDAO {
-
+	
+	private Connection connection = DB.getConnection();
 	private String mensaje = "";
 	
-	public String agregarRol(Connection connection, Rol rol) {
-		String query = "INSERT INTO ROL (id_rol, nombre, descripcion) VALUES (ROL_SEQ.NEXTVAL,?,?)";
+	private static final String
+		SELECT = "SELECT * FROM ROL ORDER BY id_rol",
+		INSERT = "INSERT INTO ROL (id_rol, nombre, descripcion) VALUES (ROL_SEQ.NEXTVAL,?,?)",
+		UPDATE = "UPDATE ROL SET nombre = ?, descripcion = ? WHERE id_rol = ?",
+		DELETE = "DELETE FROM ROL WHERE id_rol = ?";
+	
+	public String insert(Rol rol) {
 		try {
-			PreparedStatement statement = connection.prepareStatement(query);
+			PreparedStatement statement = connection.prepareStatement(INSERT);
 			statement.setString(1, rol.getNombre());
 			statement.setString(2, rol.getDescripcion());
 			statement.execute();
@@ -28,10 +35,9 @@ public class RolDAO {
 		return mensaje;
 	}
 	
-	public String modificarRol(Connection connection, Rol rol) {
-		String query = "UPDATE ROL SET nombre = ?, descripcion = ? WHERE id_rol = ?";
+	public String update(Rol rol) {
 		try {
-			PreparedStatement statement = connection.prepareStatement(query);
+			PreparedStatement statement = connection.prepareStatement(UPDATE);
 			statement.setString(1, rol.getNombre());
 			statement.setString(2, rol.getDescripcion());
 			statement.setInt(3, rol.getId());
@@ -44,10 +50,9 @@ public class RolDAO {
 		return mensaje;
 	}
 	
-	public String eliminarRol(Connection connection, int id) {
-		String query = "DELETE FROM ROL WHERE id_rol = ?";
+	public String delete(int id) {
 		try {
-			PreparedStatement statement = connection.prepareStatement(query);
+			PreparedStatement statement = connection.prepareStatement(DELETE);
 			statement.setInt(1, id);
 			statement.execute();
 			statement.close();
@@ -58,14 +63,17 @@ public class RolDAO {
 		return mensaje;
 	}
 	
-	public void listarRol(Connection connection) {
-		String query = "SELECT * FROM ROL";
+	public LinkedList<Rol> getList() {
+		LinkedList<Rol> lista = new LinkedList<Rol>();
 		try {
 			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(query);
-			viewController.showData(rs);
+			ResultSet rs = statement.executeQuery(SELECT);
+			while(rs.next()) {
+				//Rol r = new Rol();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return lista;
 	}
 }
