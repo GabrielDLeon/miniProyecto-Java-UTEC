@@ -20,7 +20,6 @@ import edu.utec.uy.model.RolAdministrador;
 import edu.utec.uy.model.RolJefe;
 import edu.utec.uy.model.RolOperador;
 
-
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JLabel;
@@ -41,9 +40,9 @@ public class FuncionalidadVIEW extends JFrame {
 	private DefaultTableModel model;
 	private JTable tFuncionalidad;
 	private JTextField inputBuscador;
-	
+
 	private FuncionalidadBO fBO = new FuncionalidadBO();
-	
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -64,38 +63,37 @@ public class FuncionalidadVIEW extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblTitulo = new JLabel("Gestor de Funcionalidad");
 		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		lblTitulo.setBounds(40, 20, 289, 29);
 		contentPane.add(lblTitulo);
-		
+
 		inputNombre = new JTextField();
 		inputNombre.setBounds(40, 80, 290, 20);
 		contentPane.add(inputNombre);
 		inputNombre.setColumns(10);
-		
+
 		JLabel lblNombre = new JLabel("Nombre");
 		lblNombre.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNombre.setBounds(40, 60, 91, 14);
 		contentPane.add(lblNombre);
-		                       
+
 		JLabel lblDescripcion = new JLabel("Descripcion");
 		lblDescripcion.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblDescripcion.setBounds(41, 110, 91, 14);
 		contentPane.add(lblDescripcion);
-		
+
 		inputDescripcion = new JTextField();
 		inputDescripcion.setColumns(10);
 		inputDescripcion.setBounds(40, 130, 290, 55);
 		contentPane.add(inputDescripcion);
-		
+
 		inputBuscador = new JTextField();
 		inputBuscador.setBounds(355, 288, 281, 19);
 		contentPane.add(inputBuscador);
 		inputBuscador.setColumns(10);
-		
-		
+
 		JButton btnInsertar = new JButton("Insertar");
 		btnInsertar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -104,7 +102,7 @@ public class FuncionalidadVIEW extends JFrame {
 		});
 		btnInsertar.setBounds(41, 257, 91, 23);
 		contentPane.add(btnInsertar);
-		
+
 		JButton btnModificar = new JButton("Modficar");
 		btnModificar.setEnabled(false);
 		btnModificar.addActionListener(new ActionListener() {
@@ -114,7 +112,7 @@ public class FuncionalidadVIEW extends JFrame {
 		});
 		btnModificar.setBounds(142, 257, 89, 23);
 		contentPane.add(btnModificar);
-		
+
 		JButton btnEliminar = new JButton("Eliminar");
 		btnEliminar.setEnabled(false);
 		btnEliminar.addActionListener(new ActionListener() {
@@ -124,7 +122,7 @@ public class FuncionalidadVIEW extends JFrame {
 		});
 		btnEliminar.setBounds(241, 257, 89, 23);
 		contentPane.add(btnEliminar);
-		
+
 		JButton btnListar = new JButton("Listar");
 		btnListar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -133,11 +131,11 @@ public class FuncionalidadVIEW extends JFrame {
 		});
 		btnListar.setBounds(646, 287, 89, 23);
 		contentPane.add(btnListar);
-		
+
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(355, 20, 380, 257);
 		contentPane.add(scrollPane);
-		
+
 		tFuncionalidad = new JTable();
 		tFuncionalidad.addKeyListener(new KeyAdapter() {
 			@Override
@@ -152,46 +150,46 @@ public class FuncionalidadVIEW extends JFrame {
 		scrollPane.setViewportView(tFuncionalidad);
 		model = new DefaultTableModel() {
 			@Override
-		    public boolean isCellEditable(int row, int column) {
-		       return false;
-		    }
+			public boolean isCellEditable(int row, int column) {
+				return false;
+			}
 		};
 		tFuncionalidad.setModel(model);
 		model.addColumn("ID");
-		model.addColumn("Tipo");
 		model.addColumn("Nombre");
 		model.addColumn("Descripcion");
-		
+
 		tFuncionalidad.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-		    public void valueChanged(ListSelectionEvent lse) {
-		        if (!lse.getValueIsAdjusting()) {
-		        	int row = tFuncionalidad.getSelectedRow();
-		        	if (row >=0) {
-		        		llenarCampos(row);
-		        		btnEliminar.setEnabled(true);
-		        		btnModificar.setEnabled(true);
-		        	} else {
-		        		limpiarInput();
-		        		btnEliminar.setEnabled(false);
-		        		btnModificar.setEnabled(false);
-		        	}
-		        }
-		    }
+			public void valueChanged(ListSelectionEvent lse) {
+				if (!lse.getValueIsAdjusting()) {
+					int row = tFuncionalidad.getSelectedRow();
+					if (row >= 0) {
+						llenarCampos(row);
+						btnEliminar.setEnabled(true);
+						btnModificar.setEnabled(true);
+					} else {
+						limpiarInput();
+						btnEliminar.setEnabled(false);
+						btnModificar.setEnabled(false);
+					}
+				}
+			}
 		});
-		
+
 		actualizarTabla();
 	}
+
 	public Funcionalidad obtenerDatos() {
 		String nombre = inputNombre.getText();
 		String description = inputDescripcion.getText();
-		
-		Funcionalidad f =  new Funcionalidad();
-		
+
+		Funcionalidad f = new Funcionalidad();
+
 		f.setNombre(nombre);
 		f.setDescripcion(description);
 		return f;
 	}
-	
+
 	public void insertar() {
 		Funcionalidad f = obtenerDatos();
 		String msg = fBO.agregarFuncionalidad(f);
@@ -200,10 +198,15 @@ public class FuncionalidadVIEW extends JFrame {
 		limpiarInput();
 	}
 
-	public void modificar() {}
-		
+	public void modificar() {
+		int id = extraerIDSeleccion();
+		Funcionalidad f = obtenerDatos();
+		f.setId(id);
+		String msg = fBO.modificarFuncionalidad(f);
+		actualizarTabla();
+		JOptionPane.showMessageDialog(null, msg);
+	}
 
-	
 	public void eliminar() {
 		int id = extraerIDSeleccion();
 		String msg = fBO.eliminarFuncionalidad(id);
@@ -211,30 +214,29 @@ public class FuncionalidadVIEW extends JFrame {
 		JOptionPane.showMessageDialog(null, msg);
 		limpiarInput();
 	}
-	
+
 	public void actualizarTabla() {
 		LinkedList<Funcionalidad> lista = fBO.listarFuncionalidad();
 		model.setRowCount(0);
-        for (Funcionalidad f : lista) {
-            Object[] fila = new Object[4];
-            fila[0] = f.getId();
-            fila[1] = f.getTipo();
-            fila[2] = f.getNombre();
-    		fila[3] = f.getDescripcion();
-            model.addRow(fila);
-        }
+		for (Funcionalidad f : lista) {
+			Object[] fila = new Object[3];
+			fila[0] = f.getId();
+			fila[1] = f.getNombre();
+			fila[2] = f.getDescripcion();
+			model.addRow(fila);
+		}
 	}
-	
+
 	public void limpiarInput() {
 		inputNombre.setText("");
 		inputDescripcion.setText("");
 	}
-	
+
 	public void llenarCampos(int row) {
-		inputNombre.setText(tFuncionalidad.getValueAt(row, 1)+"");
-		inputDescripcion.setText(tFuncionalidad.getValueAt(row, 2)+"");
+		inputNombre.setText(tFuncionalidad.getValueAt(row, 1) + "");
+		inputDescripcion.setText(tFuncionalidad.getValueAt(row, 2) + "");
 	}
-	
+
 	public int extraerIDSeleccion() {
 		int row = tFuncionalidad.getSelectedRow();
 		int id = (int) tFuncionalidad.getValueAt(row, 0);
