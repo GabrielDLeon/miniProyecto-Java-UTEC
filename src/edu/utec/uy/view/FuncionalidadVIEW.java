@@ -13,12 +13,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 
 import edu.utec.uy.bo.FuncionalidadBO;
-import edu.utec.uy.bo.RolBO;
 import edu.utec.uy.model.Funcionalidad;
-import edu.utec.uy.model.Rol;
-import edu.utec.uy.model.RolAdministrador;
-import edu.utec.uy.model.RolJefe;
-import edu.utec.uy.model.RolOperador;
 
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
