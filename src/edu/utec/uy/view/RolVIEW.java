@@ -31,6 +31,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
 public class RolVIEW extends JFrame {
+//me quiero jugar un lolcito
 	private JPanel contentPane;
 	private JTextField inputNombre;
 	private JTextField inputDescripcion;
