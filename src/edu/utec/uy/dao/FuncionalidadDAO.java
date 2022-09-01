@@ -43,7 +43,7 @@ public class FuncionalidadDAO {
 			statement.setString(1, funcionalidad.getNombre());
 			statement.setString(2, funcionalidad.getDescripcion());
 			statement.setInt(3, funcionalidad.getId());
-			statement.executeUpdate();
+			statement.execute();
 			statement.close();
 			mensaje = "FUNCIONALIDAD MODIFICADA CORRECTAMENTE";
 		} catch (SQLException e) {
@@ -56,7 +56,7 @@ public class FuncionalidadDAO {
 		try {
 			PreparedStatement statement = connection.prepareStatement(DELETE);
 			statement.setInt(1, id);
-			statement.executeUpdate();
+			statement.execute();
 			statement.close();
 			mensaje = "FUNCIONALIDAD ELIMINADA CORRECTAMENTE";
 		} catch (SQLException e) {

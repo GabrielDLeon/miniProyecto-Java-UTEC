@@ -55,9 +55,7 @@ public class Funcionalidad {
 
 	@Override
 	public String toString() {
-		return "Funcionalidad [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion;
+		return "Funcionalidad [nombre=" + nombre + ", descripcion=" + descripcion + "]";
 	}
-
-	
 	
 }
