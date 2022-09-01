@@ -1,7 +1,7 @@
 package client;
 
 import edu.utec.uy.bo.PersonaBO;
-import edu.utec.uy.view.FuncionalidadVIEW2;
+
 
 public class App {
 	public static void main(String[] args) {
@@ -9,7 +9,5 @@ public class App {
 		
 		PersonaBO pBO = new PersonaBO();
 
-		FuncionalidadVIEW2 view = new FuncionalidadVIEW2();
-		view.setVisible(true);
 	}
 }
