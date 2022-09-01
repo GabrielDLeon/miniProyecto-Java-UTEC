@@ -211,7 +211,8 @@ public class FuncionalidadVIEW extends JFrame {
 	}
 
 	public void actualizarTabla() {
-		LinkedList<Funcionalidad> lista = fBO.listarFuncionalidad();
+		String filter = inputBuscador.getText();
+		LinkedList<Funcionalidad> lista = fBO.listarFuncionalidad(filter);
 		model.setRowCount(0);
 		for (Funcionalidad f : lista) {
 			Object[] fila = new Object[3];

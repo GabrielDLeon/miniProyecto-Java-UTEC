@@ -14,16 +14,16 @@ import edu.utec.uy.model.RolOperador;
 import edu.utec.uy.utils.DB;
 
 public class RolDAO {
-	
+
 	private Connection connection = DB.getConnection();
 	private String mensaje = "";
-	
-	private static final String
-		SELECT = "SELECT * FROM ROL ORDER BY id_rol",
-		INSERT = "INSERT INTO ROL (id_rol, nombre, descripcion, tipo) VALUES (ROL_SEQ.NEXTVAL,?,?,?)",
-		UPDATE = "UPDATE ROL SET nombre = ?, descripcion = ?, tipo = ? WHERE id_rol = ?",
-		DELETE = "DELETE FROM ROL WHERE id_rol = ?";
-	
+
+	private static final String SELECT = "SELECT * FROM ROL ORDER BY id_rol",
+			INSERT = "INSERT INTO ROL (id_rol, nombre, descripcion, tipo) VALUES (ROL_SEQ.NEXTVAL,?,?,?)",
+			UPDATE = "UPDATE ROL SET nombre = ?, descripcion = ?, tipo = ? WHERE id_rol = ?",
+			DELETE = "DELETE FROM ROL WHERE id_rol = ?",
+			SEARCH = "SELECT * FROM ROL WHERE tipo = ? OR nombre = ? ORDER BY id_rol";
+
 	public String insert(Rol rol) {
 		try {
 			PreparedStatement statement = connection.prepareStatement(INSERT);
@@ -34,11 +34,11 @@ public class RolDAO {
 			statement.close();
 			mensaje = "ROL INSERTADO CORRECTAMENTE";
 		} catch (SQLException e) {
-			mensaje = "NO SE PUDO INSERTAR EL ROL\n"+e.getMessage();
+			mensaje = "NO SE PUDO INSERTAR EL ROL\n" + e.getMessage();
 		}
 		return mensaje;
 	}
-	
+
 	public String update(Rol rol) {
 		try {
 			PreparedStatement statement = connection.prepareStatement(UPDATE);
@@ -50,11 +50,11 @@ public class RolDAO {
 			statement.close();
 			mensaje = "ROL MODIFICADO CORRECTAMENTE";
 		} catch (SQLException e) {
-			mensaje = "NO SE PUDO MODIFICAR EL ROL\n"+e.getMessage();
+			mensaje = "NO SE PUDO MODIFICAR EL ROL\n" + e.getMessage();
 		}
 		return mensaje;
 	}
-	
+
 	public String delete(int id) {
 		try {
 			PreparedStatement statement = connection.prepareStatement(DELETE);
@@ -63,19 +63,24 @@ public class RolDAO {
 			statement.close();
 			mensaje = "ROL ELIMINADO CORRECTAMENTE";
 		} catch (SQLException e) {
-			mensaje = "NO SE PUDO ELIMINAR EL ROL\n"+e.getMessage();
+			mensaje = "NO SE PUDO ELIMINAR EL ROL\n" + e.getMessage();
 		}
 		return mensaje;
 	}
-	
-	public LinkedList<Rol> getList() {
-		LinkedList<Rol> lista = new LinkedList<Rol>();
+
+	public LinkedList<Rol> getList(String filtro) {
+		LinkedList<Rol> lista = new LinkedList<Rol>();		
+		String query = (filtro.isEmpty()) ? SELECT : SEARCH;
 		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(SELECT);
-			while(rs.next()) {
+			PreparedStatement statement = connection.prepareStatement(query);
+			if (!filtro.isEmpty()) {
+				statement.setString(1, filtro);
+				statement.setString(2, filtro);
+			}
+			ResultSet rs = statement.executeQuery();
+			while (rs.next()) {
 				String tipo = rs.getString("tipo");
-				Rol r = null  ;
+				Rol r = null;
 				if (tipo.equals("JEFE_SECCION")) {
 					r = new RolJefe();
 				} else if (tipo.equals("OPERADOR_SECCION")) {
@@ -85,7 +90,7 @@ public class RolDAO {
 				}
 				r.setId(rs.getInt("id_rol"));
 				r.setNombre(rs.getString("nombre"));
-				r.setDescripcion(rs.getString ("descripcion"));
+				r.setDescripcion(rs.getString("descripcion"));
 				lista.add(r);
 			}
 		} catch (Exception e) {

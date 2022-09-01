@@ -49,8 +49,8 @@ public class FuncionalidadBO {
 		return mensaje;
 	}
 
-	public LinkedList<Funcionalidad> listarFuncionalidad() {
-		LinkedList<Funcionalidad> lista = dao.getList();
+	public LinkedList<Funcionalidad> listarFuncionalidad(String filter) {
+		LinkedList<Funcionalidad> lista = dao.getList(filter);
 		return lista;
 	}
 

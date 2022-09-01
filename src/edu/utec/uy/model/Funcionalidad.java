@@ -7,8 +7,6 @@ public class Funcionalidad {
 	private int id;
     private String nombre, descripcion;
     private LinkedList<Rol> rolLista = new LinkedList<Rol>();
-    private TipoFuncionalidad tipoFuncionalidad;
-    
     
     public boolean acceso(Persona p) {
         // SEGUIR EL CÓDIGO
@@ -55,7 +53,7 @@ public class Funcionalidad {
 
 	@Override
 	public String toString() {
-		return "Funcionalidad [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion;
+		return nombre;
 	}
 
 	
