@@ -7,7 +7,6 @@ public class App {
 		System.out.println("Inicializando aplicación...");
 		
 		PersonaBO pBO = new PersonaBO();
-		System.out.println("Soy Bruno");
 
 	}
 }
