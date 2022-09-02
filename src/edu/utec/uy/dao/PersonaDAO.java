@@ -23,7 +23,7 @@ public class PersonaDAO {
 	private static final String SELECT = "SELECT id_persona, documento, apellido1, apellido2, nombre1, nombre2, mail, clave, fec_nac, persona.id_rol AS rol, rol.tipo as tipo_rol FROM persona INNER JOIN rol ON persona.id_rol = rol.id_rol ORDER BY id_persona",
 			LOGIN = "SELECT * FROM PERSONA WHERE mail = ? AND clave = ?",
 			INSERT = "INSERT INTO PERSONA (id_persona, documento, nombre1, nombre2, apellido1, apellido2, mail, clave, id_rol, fec_nac) VALUES (PERSONA_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-			UPDATE = "UPDATE PERSONA SET documento = ?, nombre1 = ?, nombre2 = ?, apellido1 = ?, apellido2 = ?,mail = ?, clave = ?, fecha_nac = ?",
+			UPDATE = "UPDATE PERSONA SET documento = ?, nombre1 = ?, nombre2 = ?, apellido1 = ?, apellido2 = ?,mail = ?, clave = ?, fec_nac = ? WHERE id_persona = ?",
 			DELETE = "DELETE FROM PERSONA WHERE id_persona = ?";
 
 	public String login(String mail, String password) {
@@ -71,13 +71,14 @@ public class PersonaDAO {
 		try {
 			PreparedStatement statement = connection.prepareStatement(UPDATE);
 			statement.setString(1, persona.getDocumento());
-			statement.setString(4, persona.getNombre1());
-			statement.setString(5, persona.getNombre2());
-			statement.setString(2, persona.getApellido1());
-			statement.setString(3, persona.getApellido2());
+			statement.setString(2, persona.getNombre1());
+			statement.setString(3, persona.getNombre2());
+			statement.setString(4, persona.getApellido1());
+			statement.setString(5, persona.getApellido2());
 			statement.setString(6, persona.getMail());
 			statement.setString(7, persona.getClave());
-			//statement.setDate(8, (Date) persona.getFechaNac());
+			statement.setDate(8, persona.getFechaNac());
+			statement.setInt(9, persona.getId());
 			statement.execute();
 			statement.close();
 			mensaje = "PERSONA MODIFICADA CORRECTAMENTE";
@@ -117,17 +118,25 @@ public class PersonaDAO {
 				p.setMail(rs.getString("mail"));
 				p.setFechaNac(rs.getDate("fec_nac"));
 				
-				Rol rol = null;
-				String tipo = rs.getString("tipo_rol");
-				if (tipo.equals(TipoRol.ADMINISTRADOR)){
-					rol = new RolAdministrador();
-				} else if (tipo.equals(TipoRol.JEFE_SECCION)){
-					rol = new RolJefe();
-				} else if (tipo.equals(TipoRol.OPERADOR_SECCION)){
-					rol = new RolOperador();
+				String tipo = rs.getString("tipo_rol").toUpperCase();
+				
+				if (tipo.equals(TipoRol.ADMINISTRADOR.toString())){
+				    RolAdministrador rol = new RolAdministrador();
+				    rol.setId(rs.getInt("rol"));
+				    rol.setTipo(TipoRol.ADMINISTRADOR);
+				    p.setRol(rol);
+				} else if (tipo.equals(TipoRol.JEFE_SECCION.toString())){
+				    RolJefe rol = new RolJefe();
+				    rol.setId(rs.getInt("rol"));
+				    rol.setTipo(TipoRol.JEFE_SECCION);
+				    p.setRol(rol);
+				} else if (tipo.equals(TipoRol.OPERADOR_SECCION.toString())){
+				    RolOperador rol = new RolOperador();
+				    rol.setId(rs.getInt("rol"));
+				    rol.setTipo(TipoRol.OPERADOR_SECCION);
+				    p.setRol(rol);
 				}
-				rol.setId(rs.getInt("rol"));
-				p.setRol(rol);
+				
 				lista.add(p);
 			}
 		} catch (Exception e) {

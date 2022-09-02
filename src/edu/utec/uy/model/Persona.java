@@ -96,7 +96,7 @@ public class Persona {
 	public String toString() {
 		return "Persona [documento=" + documento + ", apellido1=" + apellido1 + ", apellido2=" + apellido2
 				+ ", nombre1=" + nombre1 + ", nombre2=" + nombre2 + ", mail=" + mail + ", clave=" + clave
-				+ ", fechaNac=" + fechaNac + "]";
+				+ ", fechaNac=" + fechaNac +  rol + "]";
 	}
 	
 

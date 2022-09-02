@@ -39,6 +39,8 @@ import java.sql.Date;
 import javax.swing.JPasswordField;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JComboBox;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class PersonaVIEW extends JFrame {
 
@@ -82,15 +84,16 @@ public class PersonaVIEW extends JFrame {
 
     public PersonaVIEW() {
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	setBounds(100, 100, 800, 500);
+	setBounds(100, 100, 800, 600);
 	contentPane = new JPanel();
 	contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 	setContentPane(contentPane);
 	contentPane.setLayout(null);
 
 	JLabel lblTitulo = new JLabel("Gestor de Personas");
+	lblTitulo.setHorizontalAlignment(SwingConstants.CENTER);
 	lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 18));
-	lblTitulo.setBounds(41, 28, 289, 29);
+	lblTitulo.setBounds(10, 10, 320, 48);
 	contentPane.add(lblTitulo);
 
 	inputDocumento = new JTextField();
@@ -139,13 +142,13 @@ public class PersonaVIEW extends JFrame {
 	contentPane.add(lblApellido2);
 
 	inputBusquedaNombre = new JTextField();
-	inputBusquedaNombre.setBounds(368, 377, 135, 19);
+	inputBusquedaNombre.setBounds(394, 529, 135, 19);
 	contentPane.add(inputBusquedaNombre);
 	inputBusquedaNombre.setColumns(10);
 
 	inputBusquedaApellido = new JTextField();
 	inputBusquedaApellido.setColumns(10);
-	inputBusquedaApellido.setBounds(514, 377, 135, 19);
+	inputBusquedaApellido.setBounds(540, 529, 135, 19);
 	contentPane.add(inputBusquedaApellido);
 
 	JButton btnInsertar = new JButton("Insertar");
@@ -183,11 +186,11 @@ public class PersonaVIEW extends JFrame {
 		actualizarTabla();
 	    }
 	});
-	btnListar.setBounds(659, 375, 89, 23);
+	btnListar.setBounds(685, 527, 89, 23);
 	contentPane.add(btnListar);
 
 	JScrollPane scrollPane = new JScrollPane();
-	scrollPane.setBounds(340, 28, 408, 338);
+	scrollPane.setBounds(354, 10, 420, 508);
 	contentPane.add(scrollPane);
 
 	tPersona = new JTable();
@@ -228,7 +231,7 @@ public class PersonaVIEW extends JFrame {
 	contentPane.add(inputClave);
 
 	dateChooser = new JDateChooser();
-	dateChooser.setDateFormatString("dd/MM/yyyy");
+	dateChooser.setDateFormatString("dd-MMM-yy");
 
 	dateChooser.setBounds(142, 281, 188, 20);
 	contentPane.add(dateChooser);
@@ -363,7 +366,7 @@ public class PersonaVIEW extends JFrame {
 	    fila[5] = persona.getApellido2();
 	    fila[6] = persona.getMail();
 	    fila[7] = persona.getFechaNac();
-	    fila[8] = persona.getRol();
+	    fila[8] = persona.getRol().getTipo();
 	    model.addRow(fila);
 	}
     }
