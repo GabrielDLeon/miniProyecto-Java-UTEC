@@ -3,10 +3,9 @@ package edu.utec.uy.bo;
 import java.util.LinkedList;
 
 import edu.utec.uy.dao.FuncRolDAO;
-import edu.utec.uy.dao.IFuncRolDAO;
 import edu.utec.uy.model.Funcionalidad;
 
-public class FuncRolBO implements IFuncRolDAO{
+public class FuncRolBO {
 	
 	private String mensaje = "";
 	private FuncRolDAO dao = new FuncRolDAO();

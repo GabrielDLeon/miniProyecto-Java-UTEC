@@ -46,6 +46,6 @@ public abstract class Rol {
 
 	@Override
 	public String toString() {
-		return "Rol [nombre=" + nombre + ", descripcion=" + descripcion + "]";
+		return nombre;
 	}
 }

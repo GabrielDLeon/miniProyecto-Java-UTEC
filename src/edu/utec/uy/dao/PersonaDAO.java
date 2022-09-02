@@ -1,7 +1,6 @@
 package edu.utec.uy.dao;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +8,11 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 import edu.utec.uy.model.Persona;
+import edu.utec.uy.model.Rol;
+import edu.utec.uy.model.RolAdministrador;
+import edu.utec.uy.model.RolJefe;
+import edu.utec.uy.model.RolOperador;
+import edu.utec.uy.model.TipoRol;
 import edu.utec.uy.utils.DB;
 
 public class PersonaDAO {
@@ -16,9 +20,9 @@ public class PersonaDAO {
 	private Connection connection = DB.getConnection();
 	private String mensaje = "";
 
-	private static final String SELECT = "SELECT * FROM PERSONA ORDER BY id_persona",
+	private static final String SELECT = "SELECT id_persona, documento, apellido1, apellido2, nombre1, nombre2, mail, clave, fec_nac, persona.id_rol AS rol, rol.tipo as tipo_rol FROM persona INNER JOIN rol ON persona.id_rol = rol.id_rol ORDER BY id_persona",
 			LOGIN = "SELECT * FROM PERSONA WHERE mail = ? AND clave = ?",
-			INSERT = "INSERT INTO PERSONA (id_persona, documento, nombre1, nombre2, apellido1, apellido2, mail, clave, id_rol, fecha_nac) VALUES (PERSONA_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+			INSERT = "INSERT INTO PERSONA (id_persona, documento, nombre1, nombre2, apellido1, apellido2, mail, clave, id_rol, fec_nac) VALUES (PERSONA_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			UPDATE = "UPDATE PERSONA SET documento = ?, nombre1 = ?, nombre2 = ?, apellido1 = ?, apellido2 = ?,mail = ?, clave = ?, fecha_nac = ?",
 			DELETE = "DELETE FROM PERSONA WHERE id_persona = ?";
 
@@ -41,17 +45,18 @@ public class PersonaDAO {
 	}
 
 	public String insert(Persona persona) {
+		System.out.println(persona.getFechaNac());
 		try {
 			PreparedStatement statement = connection.prepareStatement(INSERT);
 			statement.setString(1, persona.getDocumento());
-			statement.setString(4, persona.getNombre1());
-			statement.setString(5, persona.getNombre2());
-			statement.setString(2, persona.getApellido1());
-			statement.setString(3, persona.getApellido2());
+			statement.setString(2, persona.getNombre1());
+			statement.setString(3, persona.getNombre2());
+			statement.setString(4, persona.getApellido1());
+			statement.setString(5, persona.getApellido2());
 			statement.setString(6, persona.getMail());
 			statement.setString(7, persona.getClave());
 			statement.setInt(8, persona.getRol().getId());
-			statement.setDate(9, (Date) null);
+			statement.setDate(9, persona.getFechaNac());
 			statement.execute();
 			statement.close();
 			mensaje = "PERSONA INSERTADA CORRECTAMENTE";
@@ -72,7 +77,7 @@ public class PersonaDAO {
 			statement.setString(3, persona.getApellido2());
 			statement.setString(6, persona.getMail());
 			statement.setString(7, persona.getClave());
-			statement.setDate(8, (Date) persona.getFechaNac());
+			//statement.setDate(8, (Date) persona.getFechaNac());
 			statement.execute();
 			statement.close();
 			mensaje = "PERSONA MODIFICADA CORRECTAMENTE";
@@ -109,7 +114,20 @@ public class PersonaDAO {
 				p.setNombre2(rs.getString("nombre2"));
 				p.setApellido1(rs.getString("apellido1"));
 				p.setApellido2(rs.getString("apellido2"));
+				p.setMail(rs.getString("mail"));
 				p.setFechaNac(rs.getDate("fec_nac"));
+				
+				Rol rol = null;
+				String tipo = rs.getString("tipo_rol");
+				if (tipo.equals(TipoRol.ADMINISTRADOR)){
+					rol = new RolAdministrador();
+				} else if (tipo.equals(TipoRol.JEFE_SECCION)){
+					rol = new RolJefe();
+				} else if (tipo.equals(TipoRol.OPERADOR_SECCION)){
+					rol = new RolOperador();
+				}
+				rol.setId(rs.getInt("rol"));
+				p.setRol(rol);
 				lista.add(p);
 			}
 		} catch (Exception e) {

@@ -10,39 +10,46 @@ public class PersonaBO {
 	private String mensaje = "";
 	private PersonaDAO dao = new PersonaDAO();
 
-	public String login(String mail, String password) {
-		try {
-			mensaje = dao.login(mail, password);
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
-		}
+	public String login(String mail, String clave) {
+		if (mail.isEmpty() || clave.isEmpty()){
+			return "DEBE INGRESAR TODO LOS CAMPOS";
+		}		
+		mensaje = dao.login(mail, clave);
 		return mensaje;
 	}
 	
 	public String agregarPersona(Persona instancia) {
-		try {
-			mensaje = dao.insert(instancia);
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
+		if (
+			instancia.getDocumento().isEmpty() ||
+			instancia.getNombre1().isEmpty() ||
+			instancia.getApellido1().isEmpty() ||
+			instancia.getMail().isEmpty() ||
+			instancia.getClave().isEmpty()
+		){
+			return "DEBE INGRESAR TODO LOS CAMPOS";
 		}
+		mensaje = dao.insert(instancia);
 		return mensaje;
 	}
 
 	public String modificarPersona(Persona instancia) {
-		try {
-			mensaje = dao.update(instancia);
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
+		if (
+			instancia.getDocumento().isEmpty() ||
+			instancia.getNombre1().isEmpty() ||
+			instancia.getApellido1().isEmpty() ||
+			instancia.getMail().isEmpty() ||
+			instancia.getClave().isEmpty() ||
+			instancia.getId() == 0
+		){
+			return "DEBE INGRESAR TODO LOS CAMPOS"; 
 		}
+		
+		mensaje = dao.update(instancia);
 		return mensaje;
 	}
 
 	public String eliminarPersona(int id) {
-		try {
-			mensaje = dao.delete(id);
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
-		}
+		mensaje = dao.delete(id);
 		return mensaje;
 	}
 
