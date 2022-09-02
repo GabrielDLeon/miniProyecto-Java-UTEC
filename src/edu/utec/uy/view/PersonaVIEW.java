@@ -84,7 +84,7 @@ public class PersonaVIEW extends JFrame {
 
     public PersonaVIEW() {
 	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	setBounds(100, 100, 800, 600);
+	setBounds(100, 100, 800, 450);
 	contentPane = new JPanel();
 	contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 	setContentPane(contentPane);
@@ -142,13 +142,13 @@ public class PersonaVIEW extends JFrame {
 	contentPane.add(lblApellido2);
 
 	inputBusquedaNombre = new JTextField();
-	inputBusquedaNombre.setBounds(394, 529, 135, 19);
+	inputBusquedaNombre.setBounds(364, 377, 135, 19);
 	contentPane.add(inputBusquedaNombre);
 	inputBusquedaNombre.setColumns(10);
 
 	inputBusquedaApellido = new JTextField();
 	inputBusquedaApellido.setColumns(10);
-	inputBusquedaApellido.setBounds(540, 529, 135, 19);
+	inputBusquedaApellido.setBounds(509, 377, 135, 19);
 	contentPane.add(inputBusquedaApellido);
 
 	JButton btnInsertar = new JButton("Insertar");
@@ -186,11 +186,11 @@ public class PersonaVIEW extends JFrame {
 		actualizarTabla();
 	    }
 	});
-	btnListar.setBounds(685, 527, 89, 23);
+	btnListar.setBounds(685, 376, 89, 23);
 	contentPane.add(btnListar);
 
 	JScrollPane scrollPane = new JScrollPane();
-	scrollPane.setBounds(354, 10, 420, 508);
+	scrollPane.setBounds(354, 10, 420, 356);
 	contentPane.add(scrollPane);
 
 	tPersona = new JTable();
