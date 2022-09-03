@@ -10,12 +10,12 @@ public class PersonaBO {
 	private String mensaje = "";
 	private PersonaDAO dao = new PersonaDAO();
 
-	public String login(String mail, String clave) {
+	public Persona login(String mail, String clave) {
 		if (mail.isEmpty() || clave.isEmpty()){
-			return "DEBE INGRESAR TODO LOS CAMPOS";
+			return null;
 		}		
-		mensaje = dao.login(mail, clave);
-		return mensaje;
+		Persona p = dao.login(mail, clave);
+		return p;
 	}
 	
 	public String agregarPersona(Persona instancia) {
@@ -23,8 +23,7 @@ public class PersonaBO {
 			instancia.getDocumento().isEmpty() ||
 			instancia.getNombre1().isEmpty() ||
 			instancia.getApellido1().isEmpty() ||
-			instancia.getMail().isEmpty() ||
-			instancia.getClave().isEmpty()
+			instancia.getMail().isEmpty()
 		){
 			return "DEBE INGRESAR TODO LOS CAMPOS";
 		}
@@ -37,9 +36,7 @@ public class PersonaBO {
 			instancia.getDocumento().isEmpty() ||
 			instancia.getNombre1().isEmpty() ||
 			instancia.getApellido1().isEmpty() ||
-			instancia.getMail().isEmpty() ||
-			instancia.getClave().isEmpty() ||
-			instancia.getId() == 0
+			instancia.getMail().isEmpty()
 		){
 			return "DEBE INGRESAR TODO LOS CAMPOS"; 
 		}
