@@ -18,6 +18,7 @@ import edu.utec.uy.model.RolAdministrador;
 import edu.utec.uy.model.RolJefe;
 import edu.utec.uy.model.RolOperador;
 import edu.utec.uy.model.TipoRol;
+import edu.utec.uy.vo.RolVO;
 
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -146,6 +147,7 @@ public class RolVIEW extends JFrame {
 				int row = tRol.getSelectedRow();
 				Rol rol = getRolFromTable(row);
 				FuncRolVIEW panel = new FuncRolVIEW(rol);
+				panel.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 				panel.setVisible(true);
 			}
 		});
@@ -215,34 +217,39 @@ public class RolVIEW extends JFrame {
 		String description = inputDescripcion.getText();
 		TipoRol tipo = (TipoRol) selectTipo.getSelectedItem();
 
-		Rol rol = null;
-		if (tipo.equals(TipoRol.ADMINISTRADOR)) {
-			rol = new RolAdministrador();
-		} else if (tipo.equals(TipoRol.JEFE_SECCION)) {
-			rol = new RolJefe();
-		} else if (tipo.equals(TipoRol.OPERADOR_SECCION)) {
-			rol = new RolOperador();
-		}
-
+		Rol rol = Rol.createRol(tipo);
 		rol.setNombre(nombre);
 		rol.setDescripcion(description);
 
 		return rol;
 	}
+	
+	public RolVO rolToVO(Rol i) {
+		RolVO rol = new RolVO();
+		rol.setId(i.getId());
+		rol.setNombre(i.getNombre());
+		rol.setDescripcion(i.getDescripcion());
+		rol.setTipo(i.getTipo());
+		return rol;
+	}
 
 	public void insertar() {
-		Rol rol = getRolFromForm();
-		String msg = rBO.agregarRol(rol);
+		Rol r = getRolFromForm();
+		RolVO rol = rolToVO(r);
+		
+		String msg = rBO.insert(rol);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 		limpiarInput();
 	}
 
 	public void modificar() {
-		Rol rol = getRolFromForm();
+		Rol r = getRolFromForm();
 		int id = extraerIDSeleccion();
-		rol.setId(id);
-		String msg = rBO.modificarRol(rol);
+		r.setId(id);
+		
+		RolVO rol = rolToVO(r);
+		String msg = rBO.update(rol);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 	}
@@ -253,7 +260,7 @@ public class RolVIEW extends JFrame {
 		int dialogResult = JOptionPane.showConfirmDialog(this, "¿Desea eliminar este registro de la Base de datos?",
 				"Confirmar acción", dialogButton);
 		if (dialogResult == 0) {
-			String msg = rBO.eliminarRol(id);
+			String msg = rBO.delete(id);
 			actualizarTabla();
 			JOptionPane.showMessageDialog(null, msg);
 			limpiarInput();
@@ -263,7 +270,7 @@ public class RolVIEW extends JFrame {
 	public void actualizarTabla() {
 		LinkedList<Rol> lista;
 		String filtro = inputBuscador.getText();
-		lista = rBO.listarRol(filtro);
+		lista = rBO.getList(filtro);
 
 		model.setRowCount(0);
 		for (Rol rol : lista) {

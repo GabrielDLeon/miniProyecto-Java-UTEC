@@ -14,6 +14,7 @@ import edu.utec.uy.model.RolJefe;
 import edu.utec.uy.model.RolOperador;
 import edu.utec.uy.model.TipoRol;
 import edu.utec.uy.utils.DB;
+import edu.utec.uy.vo.PersonaVO;
 
 public class PersonaDAO {
 
@@ -24,7 +25,8 @@ public class PersonaDAO {
 			LOGIN = "SELECT * FROM PERS_ROL_VIEW WHERE mail = ?",
 			INSERT = "INSERT INTO PERSONA (id_persona, documento, nombre1, nombre2, apellido1, apellido2, mail, clave, id_rol, fec_nac) VALUES (PERSONA_SEQ.NEXTVAL, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 			UPDATE = "UPDATE PERSONA SET documento = ?, nombre1 = ?, nombre2 = ?, apellido1 = ?, apellido2 = ?, mail = ?, clave = ?, fec_nac = ?, id_rol = ? WHERE id_persona = ?",
-			DELETE = "DELETE FROM PERSONA WHERE id_persona = ?";
+			DELETE = "DELETE FROM PERSONA WHERE id_persona = ?",
+			SEARCH = "SELECT * FROM PERS_ROL_VIEW WHERE nombre1 LIKE ? OR nombre2 LIKE ? OR apellido1 LIKE ? OR apellido2 LIKE ? ";
 
 	public Persona login(String mail, String clave) {
 		try {
@@ -43,19 +45,19 @@ public class PersonaDAO {
 		return null;
 	}
 
-	public String insert(Persona persona) {
-		System.out.println(persona.getFechaNac());
+	public String insert(Persona i) {
+		System.out.println(i.getFechaNac());
 		try {
 			PreparedStatement statement = connection.prepareStatement(INSERT);
-			statement.setString(1, persona.getDocumento());
-			statement.setString(2, persona.getNombre1());
-			statement.setString(3, persona.getNombre2());
-			statement.setString(4, persona.getApellido1());
-			statement.setString(5, persona.getApellido2());
-			statement.setString(6, persona.getMail());
-			statement.setString(7, persona.getClave());
-			statement.setInt(8, persona.getRol().getId());
-			statement.setDate(9, persona.getFechaNac());
+			statement.setString(1, i.getDocumento());
+			statement.setString(2, i.getNombre1());
+			statement.setString(3, i.getNombre2());
+			statement.setString(4, i.getApellido1());
+			statement.setString(5, i.getApellido2());
+			statement.setString(6, i.getMail());
+			statement.setString(7, i.getClave());
+			statement.setInt(8, i.getRol().getId());
+			statement.setDate(9, i.getFechaNac());
 			statement.execute();
 			statement.close();
 			mensaje = "PERSONA INSERTADA CORRECTAMENTE";
@@ -66,19 +68,19 @@ public class PersonaDAO {
 		return mensaje;
 	}
 
-	public String update(Persona persona) {
+	public String update(Persona i) {
 		try {
 			PreparedStatement statement = connection.prepareStatement(UPDATE);
-			statement.setString(1, persona.getDocumento());
-			statement.setString(2, persona.getNombre1());
-			statement.setString(3, persona.getNombre2());
-			statement.setString(4, persona.getApellido1());
-			statement.setString(5, persona.getApellido2());
-			statement.setString(6, persona.getMail());
-			statement.setString(7, persona.getClave());
-			statement.setDate(8, persona.getFechaNac());
-			statement.setInt(9, persona.getRol().getId());
-			statement.setInt(10, persona.getId());
+			statement.setString(1, i.getDocumento());
+			statement.setString(2, i.getNombre1());
+			statement.setString(3, i.getNombre2());
+			statement.setString(4, i.getApellido1());
+			statement.setString(5, i.getApellido2());
+			statement.setString(6, i.getMail());
+			statement.setString(7, i.getClave());
+			statement.setDate(8, i.getFechaNac());
+			statement.setInt(9, i.getRol().getId());
+			statement.setInt(10, i.getId());
 			statement.execute();
 			statement.close();
 			mensaje = "PERSONA MODIFICADA CORRECTAMENTE";
@@ -102,11 +104,21 @@ public class PersonaDAO {
 		return mensaje;
 	}
 
-	public LinkedList<Persona> getList() {
+	public LinkedList<Persona> getList(String filtro) {
 		LinkedList<Persona> lista = new LinkedList<Persona>();
 		try {
-			Statement statement = connection.createStatement();
-			ResultSet rs = statement.executeQuery(SELECT);
+			boolean useFiltro = !filtro.isEmpty();
+			String query = (useFiltro) ? SEARCH : SELECT;
+			PreparedStatement statement = connection.prepareStatement(query);
+			if (useFiltro) {
+				int cant = 4;
+				for (int i = 1; i <= cant; i++) {
+					statement.setString(i, "%" + filtro + "%");
+				}
+			}
+
+			ResultSet rs = statement.executeQuery();
+
 			while (rs.next()) {
 				Persona p = getPersonaFromRS(rs);
 				lista.add(p);
@@ -132,15 +144,7 @@ public class PersonaDAO {
 
 			String tipo = rs.getString("tipo_rol");
 			if (tipo != null) {
-				Rol rol = null;
-				if (tipo.equals(TipoRol.ADMINISTRADOR.toString())) {
-					rol = new RolAdministrador();
-				} else if (tipo.equals(TipoRol.JEFE_SECCION.toString())) {
-					rol = new RolJefe();
-					rol.setTipo(TipoRol.JEFE_SECCION);
-				} else if (tipo.equals(TipoRol.OPERADOR_SECCION.toString())) {
-					rol = new RolOperador();
-				}
+				Rol rol = Rol.createRol(TipoRol.valueOf(tipo));
 				rol.setId(rs.getInt("id_rol"));
 				rol.setNombre(rs.getString("rol"));
 				rol.setDescripcion(rs.getString("descripcion"));

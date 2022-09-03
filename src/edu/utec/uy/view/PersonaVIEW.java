@@ -18,6 +18,7 @@ import edu.utec.uy.bo.RolBO;
 import edu.utec.uy.model.Funcionalidad;
 import edu.utec.uy.model.Persona;
 import edu.utec.uy.model.Rol;
+import edu.utec.uy.vo.PersonaVO;
 
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -53,7 +54,7 @@ public class PersonaVIEW extends JFrame {
 	private RolBO rBO = new RolBO();
 	private FuncRolBO frBO = new FuncRolBO();
 
-	private LinkedList<Rol> roles = rBO.listarRol("");
+	private LinkedList<Rol> roles = rBO.getList("");
 	private Object[] obj = roles.toArray();
 
 	private JComboBox selectRol = new JComboBox(obj);
@@ -276,8 +277,9 @@ public class PersonaVIEW extends JFrame {
 		actualizarTabla();
 	}
 
-	public Persona getPersonaFromForm() {
-		Persona p = new Persona();
+	public PersonaVO getPersonaFromForm() {
+		PersonaVO p = new PersonaVO();
+		
 		String documento = inputDocumento.getText();
 		String nombre1 = inputNombre1.getText();
 		String nombre2 = inputNombre2.getText();
@@ -302,32 +304,35 @@ public class PersonaVIEW extends JFrame {
 		p.setFechaNac(fechaNac);
 		p.setMail(email);
 		p.setClave(clave);
-		p.setRol(rol);
+		
+		p.setIdRol(rol.getId());
+		p.setNombreRol(rol.getNombre());
+		p.setDescripcionRol(rol.getDescripcion());
+		p.setTipoRol(rol.getTipo());
 
 		return p;
 	}
 
 	public void insertarPersona() {
-		Persona p = getPersonaFromForm();
-		String msg = pBO.agregarPersona(p);
+		PersonaVO p = getPersonaFromForm();
+		String msg = pBO.insert(p);
 		actualizarTabla();
 		limpiarInput();
 		JOptionPane.showMessageDialog(null, msg);
 	}
 
 	public void modificarPersona() {
-		Persona p = getPersonaFromForm();
+		PersonaVO p = getPersonaFromForm();
 		int id = extraerIDSeleccion();
-		p.toStringTest();
-		p.setId(id);
-		String msg = pBO.modificarPersona(p);
+		p.setIdPersona(id);
+		String msg = pBO.update(p);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 	}
 
 	public void eliminarPersona() {
 		int id = extraerIDSeleccion();
-		String msg = pBO.eliminarPersona(id);
+		String msg = pBO.delete(id);
 		actualizarTabla();
 		limpiarInput();
 		JOptionPane.showMessageDialog(null, msg);
@@ -355,7 +360,9 @@ public class PersonaVIEW extends JFrame {
 	}
 	
 	public void actualizarTabla() {
-		LinkedList<Persona> lista = pBO.listarPersona();
+		String filtro = inputBuscador.getText();
+		
+		LinkedList<Persona> lista = pBO.getList(filtro);
 		model.setRowCount(0);
 		for (Persona persona : lista) {
 			Object[] fila = new Object[9];
@@ -378,6 +385,7 @@ public class PersonaVIEW extends JFrame {
 		inputApellido1.setText("");
 		inputApellido2.setText("");
 		inputEmail.setText("");
+		dateChooser.setDate(null);
 	}
 
 	public void llenarCampos(int row) {

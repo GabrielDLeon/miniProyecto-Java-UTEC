@@ -94,7 +94,7 @@ public class FuncRolVIEW extends JFrame {
 		btnInsertar.setBounds(35, 75, 139, 23);
 		contentPane.add(btnInsertar);
 
-		LinkedList<Funcionalidad> lista = fBO.listarFuncionalidad("");
+		LinkedList<Funcionalidad> lista = fBO.getList("");
 		Object[] modelFuncionalidad = lista.toArray();
 		selectFuncionalidad = new JComboBox(modelFuncionalidad);
 		selectFuncionalidad.setBounds(185, 75, 213, 22);

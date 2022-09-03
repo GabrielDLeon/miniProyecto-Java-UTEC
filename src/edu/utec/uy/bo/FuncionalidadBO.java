@@ -4,52 +4,52 @@ import java.util.LinkedList;
 
 import edu.utec.uy.dao.FuncionalidadDAO;
 import edu.utec.uy.model.Funcionalidad;
+import edu.utec.uy.vo.FuncionalidadVO;
 
 public class FuncionalidadBO {
 
 	private String mensaje = "";
 	private FuncionalidadDAO dao = new FuncionalidadDAO();
+	
+	public String insert(FuncionalidadVO i) {
+		String nombre = i.getNombre();
+		String descripcion = i.getDescripcion();
 
-	public String agregarFuncionalidad(Funcionalidad instancia) {
-		String nombre = instancia.getNombre();
-		String descripcion = instancia.getDescripcion();
-
-		if (nombre.isEmpty() || descripcion.isEmpty())
-			return "Debes completar todos los campos";
-
-		try {
-			mensaje = dao.insert(instancia);
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
+		if (nombre.isEmpty() || descripcion.isEmpty()) {
+			return "Debes completar todos los campos";			
 		}
-		return mensaje;
-	}
-
-	public String modificarFuncionalidad(Funcionalidad instancia) {
-		String nombre = instancia.getNombre();
-		String descripcion = instancia.getDescripcion();
 		
-		if (nombre.isEmpty() || descripcion.isEmpty())
-			return "Debes completar todos los campos";
+		Funcionalidad f = new Funcionalidad();
+		f.setNombre(nombre);
+		f.setDescripcion(descripcion);
+
+		mensaje = dao.insert(f);
+		return mensaje;
+	}
+
+	public String update(FuncionalidadVO i) {
+		String nombre = i.getNombre();
+		String descripcion = i.getDescripcion();
 		
-		try {
-			mensaje = dao.update(instancia);
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
+		if (nombre.isEmpty() || descripcion.isEmpty()) {
+			return "Debes completar todos los campos";			
 		}
+		
+		Funcionalidad f = new Funcionalidad();
+		f.setId(i.getId());
+		f.setNombre(nombre);
+		f.setDescripcion(descripcion);
+		
+		mensaje = dao.update(f);
 		return mensaje;
 	}
 
-	public String eliminarFuncionalidad(int id) {		
-		try {
-			mensaje = dao.delete(id);
-		} catch (Exception e) {
-			mensaje += "" + e.getMessage();
-		}
+	public String delete(int id) {		
+		mensaje = dao.delete(id);
 		return mensaje;
 	}
 
-	public LinkedList<Funcionalidad> listarFuncionalidad(String filter) {
+	public LinkedList<Funcionalidad> getList(String filter) {
 		LinkedList<Funcionalidad> lista = dao.getList(filter);
 		return lista;
 	}

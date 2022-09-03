@@ -12,6 +12,18 @@ public abstract class Rol {
 		super();
 	}
     
+    public static Rol createRol(TipoRol tipo) {
+    	Rol rol = null;
+    	if (tipo.equals(TipoRol.ADMINISTRADOR)) {
+    		rol = new RolAdministrador();
+    	} else if (tipo.equals(TipoRol.JEFE_SECCION)) {
+    		rol = new RolJefe();
+    	} else if (tipo.equals(TipoRol.OPERADOR_SECCION)) {
+    		rol = new RolOperador();
+    	}
+		return rol;
+    }
+    
 	public int getId() {
 		return id;
 	}

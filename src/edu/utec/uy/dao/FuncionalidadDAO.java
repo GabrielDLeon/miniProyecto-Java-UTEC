@@ -29,7 +29,6 @@ public class FuncionalidadDAO {
 			statement.close();
 			mensaje = "FUNCIONALIDAD INSERTADA CORRECTAMENTE";
 		} catch (SQLException e) {
-			e.printStackTrace();
 			mensaje = "NO SE PUDO INSERTAR LA FUNCIONALIDAD\n" + e.getMessage();
 		}
 		return mensaje;

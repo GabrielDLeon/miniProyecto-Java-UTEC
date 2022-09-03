@@ -14,6 +14,7 @@ import javax.swing.table.DefaultTableModel;
 
 import edu.utec.uy.bo.FuncionalidadBO;
 import edu.utec.uy.model.Funcionalidad;
+import edu.utec.uy.vo.FuncionalidadVO;
 
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -174,20 +175,20 @@ public class FuncionalidadVIEW extends JFrame {
 		actualizarTabla();
 	}
 
-	public Funcionalidad obtenerDatos() {
+	public FuncionalidadVO obtenerDatos() {
 		String nombre = inputNombre.getText();
 		String description = inputDescripcion.getText();
 
-		Funcionalidad f = new Funcionalidad();
-
+		FuncionalidadVO f = new FuncionalidadVO();
 		f.setNombre(nombre);
 		f.setDescripcion(description);
+		
 		return f;
 	}
 
 	public void insertar() {
-		Funcionalidad f = obtenerDatos();
-		String msg = fBO.agregarFuncionalidad(f);
+		FuncionalidadVO f = obtenerDatos();
+		String msg = fBO.insert(f);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 		limpiarInput();
@@ -195,16 +196,16 @@ public class FuncionalidadVIEW extends JFrame {
 
 	public void modificar() {
 		int id = extraerIDSeleccion();
-		Funcionalidad f = obtenerDatos();
+		FuncionalidadVO f = obtenerDatos();
 		f.setId(id);
-		String msg = fBO.modificarFuncionalidad(f);
+		String msg = fBO.update(f);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 	}
 
 	public void eliminar() {
 		int id = extraerIDSeleccion();
-		String msg = fBO.eliminarFuncionalidad(id);
+		String msg = fBO.delete(id);
 		actualizarTabla();
 		JOptionPane.showMessageDialog(null, msg);
 		limpiarInput();
@@ -212,7 +213,7 @@ public class FuncionalidadVIEW extends JFrame {
 
 	public void actualizarTabla() {
 		String filter = inputBuscador.getText();
-		LinkedList<Funcionalidad> lista = fBO.listarFuncionalidad(filter);
+		LinkedList<Funcionalidad> lista = fBO.getList(filter);
 		model.setRowCount(0);
 		for (Funcionalidad f : lista) {
 			Object[] fila = new Object[3];
